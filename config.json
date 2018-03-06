@@ -1,0 +1,9 @@
+{
+	"verbosity": 2,
+	"colorize": "yes",
+
+	"display":
+	{
+		"display": 7
+	}
+}
