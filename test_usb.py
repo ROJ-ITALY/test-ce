@@ -12,10 +12,6 @@ from common import *
 class Test_port(Test_basic):
 	def __init__(self):
 		Test_basic.__init__(self, 'usb')
-		self.err_dict['ENABLE1_TIMEOUT'] = 'USB 1 enable timeout'
-		self.err_dict['ENABLE2_TIMEOUT'] = 'USB 2 enable timeout'
-		self.err_dict['DISABLE1_TIMEOUT'] = 'USB 1 disable timeout'
-		self.err_dict['DISABLE2_TIMEOUT'] = 'USB 2 disable timeout'
 		self.err_dict['CHECK1_FAILED'] = 'Check USB 1 failed or invalid USB key 1'
 		self.err_dict['CHECK2_FAILED'] = 'Check USB 2 failed or invalid USB key 2'
 		self.err_dict['MOUNT1_FAILED'] = 'Mount USB 1 failed'
