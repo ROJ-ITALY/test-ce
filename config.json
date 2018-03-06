@@ -1,9 +1,12 @@
 {
 	"verbosity": 2,
 	"colorize": "yes",
+	"saveinf": "yes",
+	"savelog": "no",
 
-	"display":
+	"usb":
 	{
-		"display": 7
+		"label1": "LABEL1",
+		"label2": "LABEL2"
 	}
 }
