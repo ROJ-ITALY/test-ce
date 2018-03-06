@@ -139,7 +139,7 @@ class Test_basic:
 
 	def write_to_inf(self, name, value):
 		if self.inf_file != None:
-			self.inf_file.write('{} {}_{} {}\n'.format(self.serno, self.name, name, value))
+			self.inf_file.write('{}_{} {}\n'.format(self.name, name, value))
 
 	def success(self):
 		self.finalize()

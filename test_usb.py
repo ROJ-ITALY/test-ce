@@ -9,7 +9,7 @@ from common import *
 ###############################################################################
 #	class Test_usb
 ###############################################################################
-class Test_port(Test_basic):
+class Test_usb(Test_basic):
 	def __init__(self):
 		Test_basic.__init__(self, 'usb')
 		self.err_dict['CHECK1_FAILED'] = 'Check USB 1 failed or invalid USB key 1'
