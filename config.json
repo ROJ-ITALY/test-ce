@@ -4,6 +4,11 @@
 	"saveinf": "yes",
 	"savelog": "no",
 
+	"lan":
+	{
+		"target": "192.168.1.1"
+	},
+
 	"usb":
 	{
 		"labela": "LABELA",
