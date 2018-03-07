@@ -17,7 +17,6 @@ class Test_lan(Test_basic):
 
 	def initialize(self):
 		Test_basic.initialize(self)
-		self.if_name = 'enp0s3'
 
 	def finalize(self):
 		try:
@@ -25,16 +24,16 @@ class Test_lan(Test_basic):
 		except Test_error as e:
 			sys.exit(-1)
 
-	def check_interface(self):
-		return subprocess.run(['ip', 'address', 'show', self.if_name], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
+	def check_interface(self, if_name):
+		return subprocess.run(['ip', 'address', 'show', if_name], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
 
-	def get_mac_address(self):
-		ret = subprocess.run(['ip', 'address', 'show', self.if_name], stdout=subprocess.PIPE)
+	def get_mac_address(self, if_name):
+		ret = subprocess.run(['ip', 'address', 'show', if_name], stdout=subprocess.PIPE)
 		mac_address = self.simple_re(ret.stdout.decode('utf-8'), '.*link/ether ([0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2}:[0-9A-Fa-f]{2})')
 		return mac_address
 
-	def get_ip_address(self):
-		ret = subprocess.run(['ip', 'address', 'show', self.if_name], stdout=subprocess.PIPE)
+	def get_ip_address(self, if_name):
+		ret = subprocess.run(['ip', 'address', 'show', if_name], stdout=subprocess.PIPE)
 		ip_address = self.simple_re(ret.stdout.decode('utf-8'), '.*inet ([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*)')
 		return ip_address
 
@@ -55,17 +54,29 @@ try:
 
 	t.initialize()
 
-	t.message('Check interface')
-	if not t.check_interface():
-		raise Test_error(t, 'IF_NOT_FOUND', t.if_name)
+	t.message('Check interface \'eth0\'')
+	if not t.check_interface('eth0'):
+		raise Test_error(t, 'IF_NOT_FOUND', 'eth0')
 
-	t.message('Get IP address')
-	ip_address = t.get_ip_address()
-	t.message('IP address: %s' % ip_address)
+	t.message('Check interface \'eth1\'')
+	if not t.check_interface('eth1'):
+		raise Test_error(t, 'IF_NOT_FOUND', 'eth1')
 
-	t.message('Get MAC address')
-	ip_address = t.get_mac_address()
-	t.info('MAC address', ip_address)
+	t.message('Get IP address \'eth0\'')
+	ip_address = t.get_ip_address('eth0')
+	t.message('IP address \'eth0\': %s' % ip_address)
+
+	t.message('Get IP address \'eth1\'')
+	ip_address = t.get_ip_address('eth1')
+	t.message('IP address \'eth1\': %s' % ip_address)
+
+	t.message('Get MAC address \'eth0\'')
+	ip_address = t.get_mac_address('eth0')
+	t.info('MAC address \'eth0\'', ip_address)
+
+	t.message('Get MAC address \'eth1\'')
+	ip_address = t.get_mac_address('eth1')
+	t.info('MAC address \'eth1\'', ip_address)
 
 	t.message('Ping %s' % t.target)
 	t.ping()
