@@ -7,11 +7,11 @@ import argparse
 from common import *
 
 ###############################################################################
-#	class Test_lan
+#	class Test_ethernet
 ###############################################################################
-class Test_lan(Test_basic):
+class Test_ethernet(Test_basic):
 	def __init__(self):
-		Test_basic.__init__(self, 'lan')
+		Test_basic.__init__(self, 'ethernet')
 		self.err_dict['IF_NOT_FOUND'] = 'Interface \'%s\' not found'
 		self.err_dict['PING_FAILED'] = 'Ping failed'
 
@@ -43,9 +43,9 @@ class Test_lan(Test_basic):
 
 ###############################################################################
 try:
-	t = Test_lan()
+	t = Test_ethernet()
 
-	parser = argparse.ArgumentParser(description='Test LAN')
+	parser = argparse.ArgumentParser(description='Test Ethernet')
 	t.add_common_arguments(parser)
 	parser.add_argument('-t', '--target', type=str, default=t.config['lan']['target'], help="set target IP address to ping")
 	args = parser.parse_args()
