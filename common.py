@@ -48,6 +48,39 @@ def write_int_to_file(filename, value):
 	f.close
 
 ###############################################################################
+#	class Gpio
+###############################################################################
+class Gpio:
+	gpio_table = {
+		'IN_FAN_FB': 72
+	}
+
+	def get_index(name):
+		return gpio_table[name]
+
+	def export(name):
+		i = get_index(name)
+		if not os.path.exists('/sys/class/gpio/gpio%d' % i):
+			write_int_to_file('/sys/class/gpio/export', i)
+
+	def unexport(name):
+		i = get_index(name)
+		if os.path.exists('/sys/class/gpio/gpio%d' % i):
+			write_int_to_file('/sys/class/gpio/unexport', i)
+
+	def direction(name, d):
+		i = get_index(name)
+		write_str_to_file('/sys/class/gpio/gpio%d/direction' % i, d)
+
+	def read(name):
+		i = get_index(name)
+		write_int_from_file('/sys/class/gpio/gpio%d/value' % i)
+
+	def write(name, v):
+		i = get_index(name)
+		write_int_to_file('/sys/class/gpio/gpio%d/value' % i, v)
+
+###############################################################################
 #	class Test_error
 ###############################################################################
 class Test_error(Exception):
