@@ -3,11 +3,9 @@
 import os
 import sys
 import re
-import serial
 import time
 import tempfile
 import json
-import glob
 import datetime
 import subprocess
 
