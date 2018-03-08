@@ -47,7 +47,7 @@ try:
 
 	parser = argparse.ArgumentParser(description='Test Ethernet')
 	t.add_common_arguments(parser)
-	parser.add_argument('-t', '--target', type=str, default=t.config['lan']['target'], help="set target IP address to ping")
+	parser.add_argument('-t', '--target', type=str, default=t.config['ethernet']['target'], help="set target IP address to ping")
 	args = parser.parse_args()
 	t.copy_common_arguments(args)
 	t.target = args.target

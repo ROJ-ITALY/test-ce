@@ -26,12 +26,12 @@ class Test_datetime(Test_basic):
 	def ntp_client(self):
 		self.message('NTP client')
 		if subprocess.run(['ntpd', '-n', '-q', '-p', self.peer], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
-			Test_error(self, 'NTP_CLIENT_ERROR')
+			raise Test_error(self, 'NTP_CLIENT_ERROR')
 
 	def store(self):
 		self.message('Store system time to hardware clock')
 		if subprocess.run(['hwclock', '-w'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
-			Test_error(self, 'STORE_TO_HWCLOCK_FAILED')
+			raise Test_error(self, 'STORE_TO_HWCLOCK_FAILED')
 
 ###############################################################################
 try:

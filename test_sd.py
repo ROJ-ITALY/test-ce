@@ -26,15 +26,15 @@ class Test_sd(Test_basic):
 
 	def check(self):
 		mnt_path = '/mnt/sdcard'
-		if subprocess.run(['findmnt', '-M', mnt_path]).returncode != 0:
+		if subprocess.run(['findmnt', '-M', mnt_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
 			raise Test_error(self, 'MOUNT_FAILED')
 		p = mnt_path + os.sep + 'app_data'
 		self.message('Check for \'%s\'' % p)
-		if os.path.exists(p):
+		if not os.path.isdir(p):
 			raise Test_error(self, 'CHECK_FAILED')
 		p = mnt_path + os.sep + 'users'
 		self.message('Check for \'%s\'' % p)
-		if os.path.exists(p):
+		if not os.path.isdir(p):
 			raise Test_error(self, 'CHECK_FAILED')
 
 ###############################################################################

@@ -27,7 +27,7 @@ class Test_touch(Test_basic):
 		cal = '/home/vdw/customer_privileged_scripts/calibrate.sh'
 		if not os.path.exists(cal):
 			raise Test_error(self, 'CALIBRATE_NOT_FOUND')
-		if subprocess.run([cal]).returncode != 0:
+		if subprocess.run([cal], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
 			raise Test_error(self, 'CALIBRATE_FAILED')
 
 ###############################################################################

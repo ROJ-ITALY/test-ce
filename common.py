@@ -121,8 +121,8 @@ class Test_basic:
 		parser.add_argument('--color', type=str, choices=['yes', 'no'], default=self.config['colorize'], help="colorize the output")
 
 	def copy_common_arguments(self, args):
-		self.save_inf = args.saveinf
-		self.save_log = args.savelog
+		self.save_inf = (args.saveinf == 'yes')
+		self.save_log = (args.savelog == 'yes')
 		self.verbosity = args.verbosity
 		self.color = (args.color == 'yes')
 
@@ -131,8 +131,7 @@ class Test_basic:
 			self.config = json.load(f)
 
 	def get_test_version(self):
-		ret = subprocess.run(['git', 'describe', '--dirty',  '--always', '--tags'], stdout=subprocess.PIPE)
-		return ret.stdout[:-1].decode('utf-8')
+		return read_str_from_file('version')
 
 	def open_log(self):
 		if self.save_log:
