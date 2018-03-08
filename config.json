@@ -3,6 +3,7 @@
 	"colorize": "yes",
 	"saveinf": "yes",
 	"savelog": "no",
+	"quiet": "yes",
 
 	"datetime":
 	{

@@ -32,7 +32,7 @@ class Test_usb(Test_basic):
 		path_a = ret.stdout.decode('utf-8')[:-1]
 		if not os.path.exists(path_a):
 			raise Test_error(self, 'MOUNT_A_FAILED')
-		if subprocess.run(['sha256sum', '-c', 'test-file.sha256', '--quiet'], stdout=subprocess.DEVNULL, cwd=path_a).returncode != 0:
+		if subprocess.run(['sha256sum', '-c', 'test-file.sha256'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, cwd=path_a).returncode != 0:
 			raise Test_error(self, 'CHECK_A_FAILED')
 
 		self.message('Check USB key B')
@@ -40,7 +40,7 @@ class Test_usb(Test_basic):
 		path_b = ret.stdout.decode('utf-8')[:-1]
 		if not os.path.exists(path_b):
 			raise Test_error(self, 'MOUNT_B_FAILED')
-		if subprocess.run(['sha256sum', '-c', 'test-file.sha256', '--quiet'], stdout=subprocess.DEVNULL, cwd=path_b).returncode != 0:
+		if subprocess.run(['sha256sum', '-c', 'test-file.sha256'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, cwd=path_b).returncode != 0:
 			raise Test_error(self, 'CHECK_B_FAILED')
 
 ###############################################################################

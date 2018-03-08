@@ -72,11 +72,11 @@ try:
 
 	t.message('Get MAC address \'eth0\'')
 	ip_address = t.get_mac_address('eth0')
-	t.info('MAC address \'eth0\'', ip_address)
+	t.info('MAC_address_eth0', ip_address)
 
 	t.message('Get MAC address \'eth1\'')
 	ip_address = t.get_mac_address('eth1')
-	t.info('MAC address \'eth1\'', ip_address)
+	t.info('MAC_address_eth1', ip_address)
 
 	t.message('Ping %s' % t.target)
 	t.ping()

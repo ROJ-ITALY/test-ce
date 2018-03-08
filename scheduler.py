@@ -22,7 +22,7 @@ class Scheduler:
 	def start_test(self, i, n, name):
 		if (name == 'all'):
 			for t in test_list:
-				ret = self.start_test(i, n, t)
+				self.start_test(i, n, t)
 		else:
 			print('------------------------------')
 			print(' %d/%d - %s' % (i, n, name))
@@ -35,8 +35,6 @@ class Scheduler:
 					self.test_failed[name] = 1
 				if not args.nostop:
 					raise Scheduler_error(2)
-
-		return ret.returncode
 
 	def start(self):
 		if self.tests == None:

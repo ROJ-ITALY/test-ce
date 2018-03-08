@@ -42,7 +42,7 @@ try:
 	t.message('Get fan feedback')
 	ret = t.get_fan_feedback()
 	if ret == 0:
-		Test_error(t, "FAN_FEEDBACK_ERROR")
+		raise Test_error(t, "FAN_FEEDBACK_ERROR")
 
 	t.success()
 

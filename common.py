@@ -53,29 +53,26 @@ class Gpio:
 		'IN_FAN_FB': 72
 	}
 
-	def get_index(name):
-		return gpio_table[name]
-
 	def export(name):
-		i = get_index(name)
+		i = Gpio.gpio_table[name]
 		if not os.path.exists('/sys/class/gpio/gpio%d' % i):
 			write_int_to_file('/sys/class/gpio/export', i)
 
 	def unexport(name):
-		i = get_index(name)
+		i = Gpio.gpio_table[name]
 		if os.path.exists('/sys/class/gpio/gpio%d' % i):
 			write_int_to_file('/sys/class/gpio/unexport', i)
 
-	def direction(name, d):
-		i = get_index(name)
+	def set_direction(name, d):
+		i = Gpio.gpio_table[name]
 		write_str_to_file('/sys/class/gpio/gpio%d/direction' % i, d)
 
 	def read(name):
-		i = get_index(name)
-		write_int_from_file('/sys/class/gpio/gpio%d/value' % i)
+		i = Gpio.gpio_table[name]
+		return read_int_from_file('/sys/class/gpio/gpio%d/value' % i)
 
 	def write(name, v):
-		i = get_index(name)
+		i = Gpio.gpio_table[name]
 		write_int_to_file('/sys/class/gpio/gpio%d/value' % i, v)
 
 ###############################################################################
@@ -112,20 +109,24 @@ class Test_basic:
 		self.save_log = False
 		self.verbosity = 2
 		self.color = True
+		self.quiet = False
 		self.log_file = None
 		self.inf_file = None
+		self.printk_backup = None
 
 	def add_common_arguments(self, parser):
 		parser.add_argument('--saveinf', type=str, choices=['yes', 'no'], default=self.config['saveinf'], help="save information on file")
 		parser.add_argument('--savelog', type=str, choices=['yes', 'no'], default=self.config['savelog'], help="save log on file")
 		parser.add_argument('-v', '--verbosity', type=int, choices=[0,1,2], default=self.config['verbosity'], help="set verbosity")
 		parser.add_argument('--color', type=str, choices=['yes', 'no'], default=self.config['colorize'], help="colorize the output")
+		parser.add_argument('-q', '--quiet', type=str, choices=['yes', 'no'], default=self.config['quiet'], help="set quiet mode")
 
 	def copy_common_arguments(self, args):
 		self.save_inf = (args.saveinf == 'yes')
 		self.save_log = (args.savelog == 'yes')
 		self.verbosity = args.verbosity
 		self.color = (args.color == 'yes')
+		self.quiet = (args.quiet == 'yes')
 
 	def load_config(self):
 		with open('config.json') as f:
@@ -161,10 +162,15 @@ class Test_basic:
 		self.message('Start test [name=\'%s\', ver=\'%s\', ts=\'%s\']' % (self.name, self.get_test_version(), datetime.datetime.now()))
 		if os.getuid() != 0:
 			raise Test_error(self, 'NON_ROOT')
+		if self.quiet:
+			self.printk_backup = read_str_from_file('/proc/sys/kernel/printk')
+			write_int_to_file('/proc/sys/kernel/printk', 0)
 		self.open_inf()
-		
+
 	def finalize(self):
-		pass
+		if self.printk_backup != None:
+			write_str_to_file('/proc/sys/kernel/printk', self.printk_backup)
+			self.printk_backup = None
 
 	def write_to_log(self, s):
 		if self.log_file != None:
@@ -177,7 +183,7 @@ class Test_basic:
 	def success(self):
 		self.finalize()
 		te = time.time() - self.start
-		self.info('testDuration', round(te, 3))
+		self.info('testDuration', '{:0.3f}'.format(te))
 		s = '{:08.3f}-{}-OK'.format(te, self.name)
 		if self.color:
 			print(self.COLOR_SUCCESS + s + self.COLOR_DEFAULT)
@@ -203,7 +209,7 @@ class Test_basic:
 		else:
 			err_msg = 'Unknown error'
 		te = time.time() - self.start
-		self.info('duration', round(te, 3))
+		self.info('duration', '{:0.3f}'.format(te))
 		s = '{:08.3f}-{}-ERR {} ({})'.format(te, self.name, code, err_msg)
 		if self.color:
 			print(self.COLOR_ERROR + s + self.COLOR_DEFAULT)
