@@ -48,13 +48,13 @@ try:
 
 	t.initialize()
 
-	self.message('Read hardware clock')
+	t.message('Read hardware clock')
 	t.hc_to_sys()
 
-	self.message('NTP client from %s' % self.peer)
+	t.message('NTP client from %s' % t.peer)
 	t.ntp_client()
 
-	self.message('Write hardware clock')
+	t.message('Write hardware clock')
 	t.sys_to_hc()
 
 	t.success()
