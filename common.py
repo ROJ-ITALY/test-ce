@@ -96,7 +96,8 @@ class Test_basic:
 		self.err_dict = { 
 			'NON_ROOT': 'Non root', 
 			'DEV_NOT_FOUND': 'Device \'%s\' not found',
-			'RE_NOT_MATCH': 'Regular expression not match in string \'%s\''
+			'RE_NOT_MATCH': 'Regular expression not match in string \'%s\'',
+			'MISSING_VERSION': 'Missing version file'
 		}
 		self.COLOR_SUCCESS = '\033[92m'
 		self.COLOR_INFO = '\033[96m'
@@ -131,6 +132,8 @@ class Test_basic:
 			self.config = json.load(f)
 
 	def get_test_version(self):
+		if not os.path.exists('version'):
+			raise Test_error(self, 'MISSING_VERSION')
 		return read_str_from_file('version')
 
 	def open_log(self):
