@@ -23,6 +23,9 @@ class Test_fan(Test_basic):
 			sys.exit(-1)
 
 	def get_fan_feedback(self):
+		subprocess.run(['systemctl', 'stop', 'fan-manager'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+		Gpio.write('OUT_FAN_EN',1)
+		time.sleep(.1)
 		Gpio.export('IN_FAN_FB')
 		ret = Gpio.read('IN_FAN_FB')
 		Gpio.unexport('IN_FAN_FB')
@@ -48,5 +51,4 @@ try:
 
 except Test_error as e:
 	e.test.error(e.code, e.value)
-
 
