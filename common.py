@@ -130,13 +130,13 @@ class Test_basic:
 		self.quiet = (args.quiet == 'yes')
 
 	def load_config(self):
-		with open('config.json') as f:
+		with open('/opt/tools/config.json') as f:
 			self.config = json.load(f)
 
 	def get_test_version(self):
-		if not os.path.exists('version'):
+		if not os.path.exists('/opt/tools/version'):
 			raise Test_error(self, 'MISSING_VERSION')
-		return read_str_from_file('version')
+		return read_str_from_file('/opt/tools/version')
 
 	def open_log(self):
 		if self.save_log:
