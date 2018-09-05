@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+import shutil
 import sys
 import subprocess
 import datetime
@@ -43,5 +44,15 @@ dt_code = 'DT ' + smarc_code + cb_code + display_code + '\n'
 f_eeprom.seek(192)
 f_eeprom.write(dt_code)
 f_eeprom.close()
+
+dt_code = smarc_code + cb_code + display_code + '.dtb'
+
+# Copy and rename device tree to be loaded during the boot
+if subprocess.run(['mount', '-o', 'remount,rw', '/'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0:
+	shutil.copyfile('/' + dt_code,'/vdwcontroller.dtb')
+else:
+	print('Error to mount in RW rootfs.')
+	sys.exit(1)
+subprocess.run(['mount', '-o', 'remount,ro', '/'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 print ('eeprom programmed correctly!')
