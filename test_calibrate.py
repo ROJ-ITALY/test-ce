@@ -2,18 +2,18 @@
 
 import os
 import subprocess
-import time
 import argparse
 from common import *
 
 ###############################################################################
-#	class Test_touch
+#	class Test_calibrate
 ###############################################################################
-class Test_touch(Test_basic):
+class Test_calibrate(Test_basic):
 	def __init__(self):
-		Test_basic.__init__(self, 'touch')
-		self.err_dict['NO_TOUCH'] = 'AR1100 HID-MOUSE not detected'
-		
+		Test_basic.__init__(self, 'calibrate')
+		self.err_dict['CALIBRATE_NOT_FOUND'] = 'Calibration script not found'
+		self.err_dict['CALIBRATE_FAILED'] = 'Calibrate failed'
+
 	def initialize(self):
 		Test_basic.initialize(self)
 
@@ -23,23 +23,26 @@ class Test_touch(Test_basic):
 		except Test_error as e:
 			sys.exit(-1)
 
-	def check_touch(self):
-		return subprocess.run(['sh', '-c', 'dmesg | grep AR1100'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
+	def calibrate(self):
+		cal = '/home/vdw/customer_privileged_scripts/calibrate.sh'
+		if not os.path.exists(cal):
+			raise Test_error(self, 'CALIBRATE_NOT_FOUND')
+		if subprocess.run([cal], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
+			raise Test_error(self, 'CALIBRATE_FAILED')
 
 ###############################################################################
 try:
-	t = Test_touch()
-
-	parser = argparse.ArgumentParser(description='Test touch')
+	t = Test_calibrate()
+	
+	parser = argparse.ArgumentParser(description='Test calibrate')
 	t.add_common_arguments(parser)
 	args = parser.parse_args()
 	t.copy_common_arguments(args)
 
 	t.initialize()
 
-	t.message('Check touch AR1100 HID-MOUSE')
-	if not t.check_touch():
-		raise Test_error(t, 'NO_TOUCH')
+	t.message('Calibrate touchscreen...')
+	t.calibrate()
 
 	t.success()
 
