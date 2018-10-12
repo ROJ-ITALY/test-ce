@@ -29,7 +29,7 @@ dt_code = dt_code + '.dtb'
 f_eeprom.close()
 	
 # Copy and rename device tree to be loaded during the boot
-if subprocess.run(['/home/prod/scrips/update_bsp.sh'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0:
+if subprocess.run(['/home/prod/scripts/update_bsp.sh'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0:
 	print('Finished updating bsp.')
 else:
 	print('Error updating bsp.')
