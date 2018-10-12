@@ -29,12 +29,12 @@ dt_code = dt_code + '.dtb'
 f_eeprom.close()
 	
 # Copy and rename device tree to be loaded during the boot
-if subprocess.run(['mount', '-o', 'remount,rw', '/'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0:
-	shutil.copyfile('/' + dt_code,'/vdwcontroller.dtb')
+if subprocess.run(['/home/prod/scrips/update_bsp.sh'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0:
+	print('Finished updating bsp.')
 else:
-	print('Error to mount in RW rootfs.')
+	print('Error updating bsp.')
 	sys.exit(1)
-subprocess.run(['mount', '-o', 'remount,ro', '/'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
 print('The system will be rebooted now...')
-time.sleep(3)
 subprocess.run(['reboot'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+

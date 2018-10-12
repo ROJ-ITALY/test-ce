@@ -23,13 +23,4 @@ f_eeprom.seek(128)
 f_eeprom.write(buffer)
 f_eeprom.close()
 
-# Remove device tree except vdwcontroller.dtb
-if subprocess.run(['mount', '-o', 'remount,rw', '/'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0:
-	path = '/'
-	device_tree = [f for f in os.listdir(path) if f.endswith('.dtb')]
-	for dt in device_tree:
-		if (dt != 'vdwcontroller.dtb'):
-			os.remove(path + dt)
-	subprocess.run(['mount', '-o', 'remount,ro', '/'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
 print ('eeprom programmed correctly!')

@@ -24,7 +24,7 @@ class Test_calibrate(Test_basic):
 			sys.exit(-1)
 
 	def calibrate(self):
-		cal = '/home/vdw/customer_privileged_scripts/calibrate.sh'
+		cal = '/home/prod/scripts/calibrate.sh'
 		if not os.path.exists(cal):
 			raise Test_error(self, 'CALIBRATE_NOT_FOUND')
 		if subprocess.run([cal], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
