@@ -4,16 +4,23 @@ import time
 import sys
 import subprocess
 import shutil
+import json
 
 # Choose and program "display code"
 
+with open('config.json') as f:
+	config = json.load(f)
+
+displays = config["displays"]
+
 while True:
-	print ('Choose the display code related at the screen you are mounting.')
-	print ('01: TIANMA TM104SDHG30 10" 800X600 RGB24 parallel display')
-	
+	print ('Choose the display code related to the screen you are mounting:\n')
+	for k,val in displays.items():
+		print ('{}: {}'.format(k,val["info"]))
+	print ('')
 	display_code = input('Insert display code: ')
-	if (display_code != '01'):
-		print ('Display code no recognized. Please insert a display code in the list above.')
+	if ( not display_code in displays ):
+		print ('\n\033[31mDisplay code no recognized. Please choose a valid code from the list.\033[0m')
 		continue
 	break
 

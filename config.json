@@ -12,7 +12,21 @@
 
 	"ethernet":
 	{
-		"target": "192.168.1.1"
+		"target": "10.1.1.100"
+	},
+
+	"displays":
+	{
+		"01":
+		{
+			"info": "TIANMA TM104SDHG30 10\" 800X600 RGB24 parallel display",
+			"device": "AR1100"
+		},
+		"00":
+		{
+			"info": "No device",
+			"device": "None"
+		}
 	},
 
 	"usb":

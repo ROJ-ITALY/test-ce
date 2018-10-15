@@ -14,33 +14,42 @@ class Test_sd(Test_basic):
 		Test_basic.__init__(self, 'sd')
 		self.err_dict['CHECK_FAILED'] = 'Check SD'
 		self.err_dict['MOUNT_FAILED'] = 'Mount SD failed'
-	
+
 	def initialize(self):
 		Test_basic.initialize(self)
 
 	def finalize(self):
 		try:
 			Test_basic.finalize(self)
-		except Test_error as e:		
+		except Test_error as e:
 			sys.exit(-1)
 
 	def check(self):
 		mnt_path = '/mnt/sdcard'
+		if not os.path.isdir(mnt_path)
+			subprocess.run(['mkdir','mnt_path'])
+		if subprocess.run(['mount', '/dev/mmcblk0p1', mnt_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
+			subprocess.run(['umount', mnt_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+			raise Test_error(self,'MOUNT_FAILED')
 		if subprocess.run(['findmnt', '-M', mnt_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
+			subprocess.run(['umount', mnt_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 			raise Test_error(self, 'MOUNT_FAILED')
 		p = mnt_path + os.sep + 'app_data'
 		self.message('Check for \'%s\'' % p)
 		if not os.path.isdir(p):
+			subprocess.run(['umount', mnt_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 			raise Test_error(self, 'CHECK_FAILED')
 		p = mnt_path + os.sep + 'users'
 		self.message('Check for \'%s\'' % p)
 		if not os.path.isdir(p):
+			subprocess.run(['umount', mnt_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 			raise Test_error(self, 'CHECK_FAILED')
+		subprocess.run(['umount', mnt_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 ###############################################################################
 try:
 	t = Test_sd()
-	
+
 	parser = argparse.ArgumentParser(description='Test SD')
 	t.add_common_arguments(parser)
 	args = parser.parse_args()
