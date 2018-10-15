@@ -26,8 +26,8 @@ class Test_sd(Test_basic):
 
 	def check(self):
 		mnt_path = '/mnt/sdcard'
-		if not os.path.isdir(mnt_path)
-			subprocess.run(['mkdir','mnt_path'])
+		if not os.path.isdir(mnt_path):
+			os.mkdir(mnt_path)
 		if subprocess.run(['mount', '/dev/mmcblk0p1', mnt_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
 			subprocess.run(['umount', mnt_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 			raise Test_error(self,'MOUNT_FAILED')

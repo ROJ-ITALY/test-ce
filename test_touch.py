@@ -12,8 +12,9 @@ from common import *
 class Test_touch(Test_basic):
 	def __init__(self):
 		Test_basic.__init__(self, 'touch')
-		f_eeprom = open('/sys/bus/i2c/drivers/at24/2-0050/eeprom','r')
-		self.dt = f_eeprom.seek(128).read(2)
+		f_eeprom = open('/sys/bus/i2c/drivers/at24/2-0050/eeprom','rb')
+		f_eeprom.seek(199)
+		self.dt = f_eeprom.read(2).decode('utf-8')
 		self.err_dict['NO_DEVICE_INFO'] = 'Configuration not correct in eeprom or config file'
 		self.err_dict['NO_TOUCH'] = 'AR1100 HID-MOUSE not detected'
 		
@@ -27,7 +28,7 @@ class Test_touch(Test_basic):
 			sys.exit(-1)
 
 	def check_touch(self):
-		if (not dt in self.config["displays"]):
+		if (not self.dt in self.config["displays"]):
 			raise Test_error(self,'NO_DEVICE_INFO')
 		dev = self.config["displays"][self.dt]["device"]
 		t.message('Check touch {}'.format(dev))
@@ -45,8 +46,7 @@ try:
 
 	t.initialize()
 
-
-	t.check_touch():
+	t.check_touch()
 
 	t.success()
 
