@@ -16,7 +16,7 @@ class Test_touch(Test_basic):
 		f_eeprom.seek(199)
 		self.dt = f_eeprom.read(2).decode('utf-8')
 		self.err_dict['NO_DEVICE_INFO'] = 'Configuration not correct in eeprom or config file'
-		self.err_dict['NO_TOUCH'] = 'AR1100 HID-MOUSE not detected'
+		self.err_dict['NO_TOUCH'] = 'HID-MOUSE not detected'
 		
 	def initialize(self):
 		Test_basic.initialize(self)
@@ -31,6 +31,7 @@ class Test_touch(Test_basic):
 		if (not self.dt in self.config["displays"]):
 			raise Test_error(self,'NO_DEVICE_INFO')
 		dev = self.config["displays"][self.dt]["device"]
+		self.err_dict['NO_TOUCH'] = '{} HID-MOUSE not detected'.format(dev)
 		t.message('Check touch {}'.format(dev))
 		if (not subprocess.run(['sh', '-c', 'dmesg | grep {}'.format(dev)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0):
 			raise Test_error(self,'NO_TOUCH')
