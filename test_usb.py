@@ -31,7 +31,7 @@ class Test_usb(Test_basic):
 		dev = '/dev/disk/by-label/{}'.format(self.label_a)
 		if not os.path.isdir(mnt_path):
 			os.mkdir(mnt_path)
-		if not os.path.isdir(dev):
+		if not os.path.exists(dev):
 			raise Test_error(self, 'LABEL_A_FAILED')
 		if subprocess.run(['mount', dev, mnt_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
 			subprocess.run(['umount', mnt_path], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
