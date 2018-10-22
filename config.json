@@ -12,7 +12,7 @@
 
 	"ethernet":
 	{
-		"target": "10.1.1.100"
+		"target": "gw"
 	},
 
 	"displays":

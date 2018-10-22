@@ -14,6 +14,8 @@ class Test_ethernet(Test_basic):
 		Test_basic.__init__(self, 'ethernet')
 		self.err_dict['IF_NOT_FOUND'] = 'Interface \'%s\' not found'
 		self.err_dict['PING_FAILED'] = 'Ping failed'
+		self.err_dict['ROUTE_FAILED'] = 'Could not find default gateway'
+		self.ip_route = self.target
 
 	def initialize(self):
 		Test_basic.initialize(self)
@@ -36,6 +38,14 @@ class Test_ethernet(Test_basic):
 		ret = subprocess.run(['ip', 'address', 'show', if_name], stdout=subprocess.PIPE)
 		ip_address = self.simple_re(ret.stdout.decode('utf-8'), '.*inet ([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*)')
 		return ip_address
+
+	def get_route(self, if_name):
+		ret = subprocess.run(['ip', 'route'],stdout=subprocess.PIPE)
+		ip_route = re.match('default via (.*) dev.*',str(ret.stdout.decode('utf-8'))
+		if res.group(1) == '':
+			raise Test_error(self, 'ROUTE_FAILED')
+		elif self.target == 'gw':
+			self.target = res.group(1)
 
 	def ping(self):
 		if subprocess.run(['ping', self.target, '-q', '-c', '3'], stdout=subprocess.DEVNULL).returncode != 0:
