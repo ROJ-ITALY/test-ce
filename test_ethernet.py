@@ -89,7 +89,7 @@ try:
 
 	t.message('Get route \'eth0\'')
 	t.get_route('eth0')
-	t.info('Default gateway on eth0 %s' % t.target)
+	t.info('Default gateway on eth0', t.target)
 
 	t.message('Ping %s' % t.target)
 	t.ping()
