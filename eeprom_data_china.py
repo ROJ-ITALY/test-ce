@@ -3,14 +3,21 @@
 import os
 import subprocess
 import datetime
+import re
 
 # Final Assembly data to program in China: PN_CE, SN_CE, DATE
 
 # Read PN_CE
 pn_ce = input('Insert PN Ce: ')
+while re.match('[0-9]{1}\.[0-9]{2}\.[0-9]{5}',pn_ce) == None:
+    print ("\033[91mWrong PN\033[0m")
+    pn_ce = input('Insert PN Ce: ')
 
 # Read SN_CE
 sn_ce = input('Insert SN Ce: ')
+while re.match('R[0-9]{8}',sn_ce) == None:
+    print ("\033[91mWrong SN\033[0m")
+    sn_ce = input('Insert SN Ce: ')
 
 # Read DATE
 dt = datetime.datetime.utcnow()
