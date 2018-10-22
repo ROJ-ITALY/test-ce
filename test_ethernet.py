@@ -15,7 +15,6 @@ class Test_ethernet(Test_basic):
 		self.err_dict['IF_NOT_FOUND'] = 'Interface \'%s\' not found'
 		self.err_dict['PING_FAILED'] = 'Ping failed'
 		self.err_dict['ROUTE_FAILED'] = 'Could not find default gateway'
-		self.ip_route = self.target
 
 	def initialize(self):
 		Test_basic.initialize(self)
@@ -41,11 +40,11 @@ class Test_ethernet(Test_basic):
 
 	def get_route(self, if_name):
 		ret = subprocess.run(['ip', 'route'],stdout=subprocess.PIPE)
-		ip_route = re.match('default via (.*) dev.*',str(ret.stdout.decode('utf-8'))
-		if res.group(1) == '':
+		ip_route = re.match('default via (.*) dev {} .*'.format(if_name),str(ret.stdout.decode('utf-8')))
+		if ip_route.group(1) == '':
 			raise Test_error(self, 'ROUTE_FAILED')
 		elif self.target == 'gw':
-			self.target = res.group(1)
+			self.target = ip_route.group(1)
 
 	def ping(self):
 		if subprocess.run(['ping', self.target, '-q', '-c', '3'], stdout=subprocess.DEVNULL).returncode != 0:
@@ -87,6 +86,10 @@ try:
 	t.message('Get MAC address \'eth1\'')
 	ip_address = t.get_mac_address('eth1')
 	t.info('MAC_address_eth1', ip_address)
+
+	t.message('Get route \'eth0\'')
+	t.get_route('eth0')
+        t.info('Default gateway on eth0 %s' % t.target)
 
 	t.message('Ping %s' % t.target)
 	t.ping()
