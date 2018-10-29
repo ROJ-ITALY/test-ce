@@ -18,6 +18,7 @@
 	"usb":
 	{
 		"labela": "A",
-		"labelb": "B"
+		"labelb": "B",
+		"labelc": "C"
 	}
 }

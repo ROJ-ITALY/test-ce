@@ -14,8 +14,10 @@ class Test_usb(Test_basic):
 		Test_basic.__init__(self, 'usb')
 		self.err_dict['CHECK_A_FAILED'] = 'Check pen drive A failed or invalid pen drive A'
 		self.err_dict['CHECK_B_FAILED'] = 'Check pen drive B failed or invalid pen drive B'
+		self.err_dict['CHECK_C_FAILED'] = 'Check pen drive C failed or invalid pen drive C'
 		self.err_dict['MOUNT_A_FAILED'] = 'Mount pen drive A failed'
 		self.err_dict['MOUNT_B_FAILED'] = 'Mount pen drive B failed'
+		self.err_dict['MOUNT_C_FAILED'] = 'Mount pen drive C failed'
 	
 	def initialize(self):
 		Test_basic.initialize(self)
@@ -42,6 +44,14 @@ class Test_usb(Test_basic):
 			raise Test_error(self, 'MOUNT_B_FAILED')
 		if subprocess.run(['sha256sum', '-c', 'test-file.sha256'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, cwd=path_b).returncode != 0:
 			raise Test_error(self, 'CHECK_B_FAILED')
+			
+		self.message('Check USB key C')
+		ret = subprocess.run(['findmnt', '-S', 'LABEL=\"%s\"' % self.label_c, '-n', '-o', 'TARGET'], stdout=subprocess.PIPE)
+		path_c = ret.stdout.decode('utf-8')[:-1]
+		if not os.path.exists(path_c):
+			raise Test_error(self, 'MOUNT_C_FAILED')
+		if subprocess.run(['sha256sum', '-c', 'test-file.sha256'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, cwd=path_b).returncode != 0:
+			raise Test_error(self, 'CHECK_C_FAILED')
 
 ###############################################################################
 try:
@@ -51,10 +61,12 @@ try:
 	t.add_common_arguments(parser)
 	parser.add_argument('--labela', type=str, default=t.config['usb']['labela'], help="set pen drive A label")
 	parser.add_argument('--labelb', type=str, default=t.config['usb']['labelb'], help="set pen drive B label")
+	parser.add_argument('--labelc', type=str, default=t.config['usb']['labelc'], help="set pen drive C label")
 	args = parser.parse_args()
 	t.copy_common_arguments(args)
 	t.label_a = args.labela
 	t.label_b = args.labelb
+	t.label_c = args.labelc
 
 	t.initialize()
 
