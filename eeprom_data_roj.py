@@ -52,7 +52,9 @@ if subprocess.run(['mount', '-o', 'remount,rw', '/'], stdout=subprocess.DEVNULL,
 	shutil.copyfile('/' + dt_code,'/vdwcontroller.dtb')
 else:
 	print('Error to mount in RW rootfs.')
-	sys.exit(1)
+	sys.exit(3)
+	
 subprocess.run(['mount', '-o', 'remount,ro', '/'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 print ('eeprom programmed correctly!')
+sys.exit(0)

@@ -51,7 +51,15 @@ def write_int_to_file(filename, value):
 class Gpio:
 	gpio_table = {
 		'IN_FAN_FB': 72,
-		'OUT_FAN_EN': 171
+		'OUT_FAN_EN': 171,
+		'USER_GPIO_0': 3,
+		'USER_GPIO_1': 152,
+		'USER_GPIO_2': 151,
+		'USER_GPIO_3': 153,
+		'USER_GPIO_4': 150,
+		'USER_GPIO_5': 15,
+		'USER_GPIO_6': 13,
+		'USER_GPIO_7': 110
 	}
 
 	def export(name):
