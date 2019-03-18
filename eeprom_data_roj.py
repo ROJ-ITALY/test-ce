@@ -48,13 +48,13 @@ f_eeprom.close()
 dt_code = smarc_code + cb_code + display_code + '.dtb'
 
 # Copy and rename device tree to be loaded during the boot
-if subprocess.run(['mount', '-o', 'remount,rw', '/'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0:
-	shutil.copyfile('/' + dt_code,'/vdwcontroller.dtb')
+if subprocess.run(['mount', '-o', 'remount,rw', '/mnt/ro'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0:
+	shutil.copyfile('/mnt/ro/' + dt_code,'/mnt/ro/vdwcontroller.dtb')
 else:
 	print('Error to mount in RW rootfs.')
 	sys.exit(3)
 	
-subprocess.run(['mount', '-o', 'remount,ro', '/'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+subprocess.run(['mount', '-o', 'remount,ro', '/mnt/ro'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 print ('eeprom programmed correctly!')
 sys.exit(0)
