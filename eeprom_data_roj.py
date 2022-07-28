@@ -10,9 +10,10 @@ import datetime
 # Read SMARC_SN
 smarc_sn = input('Insert SMARC SN: ')
 smarc_code = smarc_sn[:3]
+smarc_code = smarc_sn[:4]
 if (smarc_code == '909'):
     smarc_code = '01'
-elif (smarc_code == '939'):
+elif (smarc_code == '939' or smarc_code4 == '1049'):
     smarc_code = '02'
 else:
     print ('smarc_code no recognized.')
